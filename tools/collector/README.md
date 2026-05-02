@@ -8,6 +8,7 @@ This repository contains various collectors and tools for managing community int
 - [Collectors](#collectors)
   - [Slack Gateway](#slack-gateway)
   - [Discord Gateway](#discord-gateway)
+   - [Reddit Gateway](#reddit-gateway)
   - [Main Orchestrator](#main-orchestrator)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
@@ -23,7 +24,7 @@ cd tools/collector
 python main.py
 ```
 
-This will start both Slack and Discord gateways simultaneously, creating GitHub issues and indexing to OpenSearch.
+This will start Slack, Discord, and Reddit gateways when their tokens are present.
 
 ## Configuration
 
@@ -461,7 +462,54 @@ Logs are saved to:
 
 ### Discord Gateway
 
-**Coming soon...**
+The Discord Gateway provides the same functionality as Slack for Discord messages.
+
+### Reddit Gateway
+
+The Reddit Gateway polls a public subreddit RSS feed for new posts and mirrors them to GitHub issues.
+
+#### 🎯 Features
+
+1. **New RSS Posts → GitHub Issues**
+   - Creates a GitHub issue for each new subreddit post in the RSS feed
+   - Labels: `platform/reddit`, `reddit/subreddit/{name}`
+
+2. **De-duplication + Mapping**
+   - Keeps a local SQLite mapping at `reddit_rss_mapping.db`
+   - Avoids duplicate issue creation for previously seen feed entries
+
+3. **RSS Mode**
+   - No Reddit API/OAuth credentials required
+   - Posts only (Reddit comments are not available via this RSS pipeline)
+
+#### 📋 Requirements
+
+```bash
+pip install aiohttp
+```
+
+#### 🔧 Configuration
+
+Only GitHub token is required in `tools/`:
+
+**`.token_github`**
+```text
+ghp_your_github_token_here
+```
+
+#### 🚀 Usage
+
+```bash
+cd tools/collector
+python3 reddit_gw.py
+```
+
+#### 🔧 Environment Variables
+
+- `REDDIT_SUBREDDIT` - subreddit name or URL, default `wazuh_bd`
+- `REDDIT_RSS_URL` - full RSS URL override (default: `https://www.reddit.com/r/{subreddit}/new/.rss`)
+- `REDDIT_POLL_INTERVAL` - poll interval in seconds, default `30`
+- `REDDIT_USER_AGENT` - HTTP user-agent for RSS requests, default `community-collector/1.0`
 
 ---
 
@@ -516,7 +564,8 @@ The collector tools are built with a modular, class-based architecture:
 4. **Run a collector**
    ```bash
    python3 slack_gw_v2.py  # For Slack
-   # python3 discord_gw.py  # For Discord (coming soon)
+   python3 discord_gw.py   # For Discord
+   python3 reddit_gw.py    # For Reddit
    ```
 
 5. **Monitor logs**
@@ -955,3 +1004,5 @@ For issues or questions:
 ## 📄 License
 
 This project is part of Wazuh Community Tools.
+
+

@@ -73,6 +73,17 @@ async def run_discord_collector():
         collector_logger.info("🔄 Restarting Discord collector...")
         await run_discord_collector()
 
+async def run_reddit(self):
+        """Run Reddit gateway with error handling"""
+        if not self.reddit_gateway:
+            return
+
+        logger.info("🚀 Starting Reddit gateway...")
+        try:
+            await self.reddit_gateway.run()
+        except Exception as e:
+            logger.error(f"❌ Reddit gateway error: {e}")
+            raise
 
 async def run_auditor():
     """Run auditor in continuous mode"""

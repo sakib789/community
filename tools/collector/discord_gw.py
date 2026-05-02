@@ -29,7 +29,7 @@ DISCORD_ENCODING = "json"
 
 # GitHub API endpoints
 GITHUB_API_BASE = "https://api.github.com"
-GITHUB_REPO = os.environ.get('GITHUB_REPO', 'wazuh/community-dev')
+GITHUB_REPO = os.environ.get('GITHUB_REPO', 'sakib789/community')
 
 # Get tokens from centralized token manager
 token_manager = CentralTokenManager()

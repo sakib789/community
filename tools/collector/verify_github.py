@@ -10,7 +10,7 @@ import requests
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 GITHUB_TOKEN_FILE = os.path.join(SCRIPT_DIR, '.token_github')
-GITHUB_REPO = os.environ.get('GITHUB_REPO', 'wazuh/community-dev')
+GITHUB_REPO = os.environ.get('GITHUB_REPO', 'sakib789/community')
 GITHUB_API_BASE = "https://api.github.com"
 
 

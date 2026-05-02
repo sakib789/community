@@ -33,8 +33,8 @@ except ImportError:
 # ======================== Configuration ========================
 
 OPENSEARCH_HOST = "https://search-community-metrics-oevnczvd7jexwstzykmjwj7ak4.aos.us-east-1.on.aws"
-INDEX_NAME = "tickets-raw-v1.0"
-USERNAME = "community"
+INDEX_NAME = "tickets-raw-sakib-v1.0"
+USERNAME = "sakib"
 VERIFY_CERTS = False
 
 

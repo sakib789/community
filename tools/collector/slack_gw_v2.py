@@ -32,7 +32,7 @@ LOG_FILE = os.path.join(SCRIPT_DIR, 'slack_gateway.log')
 # API endpoints
 SLACK_API_BASE = "https://slack.com/api"
 GITHUB_API_BASE = "https://api.github.com"
-GITHUB_REPO = os.environ.get('GITHUB_REPO', 'wazuh/community-dev')
+GITHUB_REPO = os.environ.get('GITHUB_REPO', 'sakib789/community')
 
 # Setup logging using centralized config
 logger = setup_logger("Collector.Slack", log_file=LOG_FILE)
@@ -314,12 +314,13 @@ class GitHubTicketCreator:
             message.text = resolved_content
         
         # Find the parent issue from OpenSearch
-        logger.debug(f"🔍 Searching OpenSearch for parent message: slack_{message.thread_ts}")
-        parent_doc = await self.indexer.get_parent_document(f"slack_{message.thread_ts}")
+        parent_doc_id = f"slack_{message.channel}_{message.thread_ts}"
+        logger.debug(f"🔍 Searching OpenSearch for parent message: {parent_doc_id}")
+        parent_doc = self.indexer.get_parent_document(parent_doc_id)
         
         if not parent_doc:
             logger.warning(f"⚠️  No parent document found in OpenSearch for thread {message.thread_ts}")
-            logger.info(f"   Tried message_id: slack_{message.thread_ts}")
+            logger.info(f"   Tried message_id: {parent_doc_id}")
             return None
         
         issue_number = parent_doc.get('github_issue_number')
@@ -847,3 +848,4 @@ if __name__ == "__main__":
         exit(1)
     
     asyncio.run(main())
+
