@@ -1,0 +1,19 @@
+# Requirements for Slack Gateway v2
+# Python 3.7+
+
+# WebSocket support for Slack Socket Mode
+websockets>=12.0
+
+# Async HTTP client for Slack and GitHub APIs
+aiohttp>=3.9.0
+
+# Standard library modules (included with Python, listed for reference)
+# - asyncio
+# - json
+# - logging
+# - os
+# - sqlite3
+# - typing
+# - datetime
+# - dataclasses
+# - re

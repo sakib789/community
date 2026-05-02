@@ -1,0 +1,62 @@
+Total tickets created per week
+
+Bar chart
+
+SELECT
+  strftime('%Y-%W', datetime(created_at, 'unixepoch')) AS week,
+  COUNT(*) AS total_issues
+FROM issues
+WHERE created_at >= $__from / 1000 and created_at < $__to / 1000
+GROUP BY week
+ORDER BY week;
+
+
+
+Tickets closed by team per week 
+Bar chart 
+
+SELECT 
+  strftime('%Y-%W', datetime(closed_at, 'unixepoch')) AS week,
+  SUM(CASE WHEN team = 'devel-xdrsiem-agent' THEN 1 ELSE 0 END) AS "devel-xdrsiem-agent",
+  SUM(CASE WHEN team = 'devel-xdrsiem-server' THEN 1 ELSE 0 END) AS "devel-xdrsiem-server",
+  SUM(CASE WHEN team = 'devel-xdrsiem-indexer' THEN 1 ELSE 0 END) AS "devel-xdrsiem-indexer",
+  SUM(CASE WHEN team = 'devel-xdrsiem-dashboard' THEN 1 ELSE 0 END) AS "devel-xdrsiem-dashboard",
+  SUM(CASE WHEN team = 'devel-xdrsiem-qa' THEN 1 ELSE 0 END) AS "devel-xdrsiem-qa",
+  SUM(CASE WHEN team = 'devel-xdrsiem-devops' THEN 1 ELSE 0 END) AS "devel-xdrsiem-devops",
+  SUM(CASE WHEN team = 'devel-cti-threatintel' THEN 1 ELSE 0 END) AS "devel-cti-threatintel",
+  SUM(CASE WHEN team = 'devel-cti-development-div2' THEN 1 ELSE 0 END) AS "devel-cti-development-div2",
+  SUM(CASE WHEN team = 'devel-cloud' THEN 1 ELSE 0 END) AS "devel-cloud",
+  SUM(CASE WHEN team = 'content' THEN 1 ELSE 0 END) AS "content",
+  SUM(CASE WHEN team = 'ops-support' THEN 1 ELSE 0 END) AS "ops-support",
+  SUM(CASE WHEN team = 'ops-presales' THEN 1 ELSE 0 END) AS "ops-presales",
+  SUM(CASE WHEN team = 'ops-community' THEN 1 ELSE 0 END) AS "ops-community",
+  SUM(CASE WHEN team = 'ops-tam' THEN 1 ELSE 0 END) AS "ops-tam",
+  SUM(CASE WHEN team = 'ops-trainings' THEN 1 ELSE 0 END) AS "ops-trainings"
+FROM issues
+WHERE 
+  closed_at >= $__from / 1000 AND closed_at < $__to / 1000
+GROUP BY week
+ORDER BY week;
+
+
+Top Assignees by Closed Issues
+Bar Chart 
+
+SELECT assignee as metric, COUNT(*) as value
+FROM issues
+WHERE assignee IS NOT NULL AND closed_at >= $__from / 1000 and closed_at < $__to / 1000
+GROUP BY assignee       
+ORDER BY value DESC        
+LIMIT 10
+
+Total tickets created by day 
+Timeseries 
+
+SELECT
+  created_at AS time,
+  strftime('%Y-%W-%d', datetime(created_at, 'unixepoch')) AS day,
+  COUNT(*) AS total_issues
+FROM issues
+WHERE created_at >= $__from / 1000 and created_at < $__to / 1000
+GROUP BY day
+ORDER BY day;

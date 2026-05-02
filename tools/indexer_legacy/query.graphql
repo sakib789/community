@@ -1,0 +1,38 @@
+query($queryString: String!, $after: String) {
+  search(query: $queryString, type: ISSUE, first: 100, after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        ... on Issue {
+          id
+          number
+          title
+          url
+          createdAt
+          closedAt
+          state
+          stateReason
+          author {
+            login
+          }
+          assignees(first: 10) {
+            nodes {
+              login
+            }
+          }
+          labels(first: 10) {
+            nodes {
+              name
+            }
+          }
+          repository {
+            nameWithOwner
+          }
+        }
+      }
+    }
+  }
+}

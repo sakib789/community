@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./issues.db:/var/lib/grafana/issues.db
+    environment:
+      - GF_INSTALL_PLUGINS=frser-sqlite-datasource
+
+volumes:
+  grafana-storage:
